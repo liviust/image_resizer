@@ -1,2 +1,2 @@
-# image_resizer
+# Image Resizer
 basic image resizing script
