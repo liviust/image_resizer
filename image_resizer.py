@@ -1,12 +1,12 @@
 from PIL import Image
-from resizeimage import resizeimage
+from scipy.misc import imresize
 import os
 import sys
 
 def resize(folder, file_name):
     file_path = os.path.join(folder, file_name)
     im = Image.open(file_path)
-    new_im = resizeimage.resize_width(im, 500)
+    new_im = imresize(im, size=(150, 150))  # replace with desired dims
     new_im.save(file_path + "copy.jpg")
 
 def bulkResize(folder):
