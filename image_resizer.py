@@ -17,4 +17,4 @@ def bulkResize(folder):
 
 
 if __name__ == "__main__":
-	bulkResize("<path goes here>")
+    bulkResize("<path goes here>")
