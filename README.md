@@ -1,2 +1,3 @@
 # Image Resizer
-basic image resizing script
+
+Used to batch resize images. Requires SciPy. 
