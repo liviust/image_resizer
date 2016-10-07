@@ -24,7 +24,7 @@ def bulkResize(folder):
 ### if aspect ratio has to be maintained, but you want to crop or pad
 
 
-def makeThumb(f_in, size=(150, 150), pad=True):
+def makeThumb(f_in, f_out, size=(80,80), pad=False):
 
     image = Image.open(f_in)
     image.thumbnail(size, Image.ANTIALIAS)
@@ -41,7 +41,7 @@ def makeThumb(f_in, size=(150, 150), pad=True):
     else:
         thumb = ImageOps.fit(image, size, Image.ANTIALIAS, (0.5, 0.5))
 
-    imshow(thumb)
+    thumb.save(f_out)
 
 
 ### if aspect ratio doesn't need to be maintained:
@@ -64,7 +64,7 @@ def bulkResize(folder):
 ### alternate code that allows you to key off of a base height or base width for a single image
 
 
-def single_resize(file_path)
+def single_resize(file_path):
 	baseheight = 150
 	img = Image.open(file_path)
 	hpercent = (baseheight / float(img.size[1]))
@@ -80,6 +80,7 @@ def single_resize(file_path)
 	img.save('{0}x{1}.jpg'.format(basewidth, hsize))
 
 if __name__ == "__main__":
-	bulkResize("<path to file directory goes here>")
-	makeThumb("<path to file directory goes here>", pad=True)
-	single_resize("<path to file goes here>")
+	source = "<path to file directory goes here>"
+	bulkResize(source)
+	makeThumb(f_in=source, f_out="<outpath>", pad=True)
+	single_resize(source)
