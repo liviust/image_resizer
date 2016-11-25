@@ -1,8 +1,7 @@
+import os
 from PIL import Image, ImageChops, ImageOps
 from scipy.misc import imresize, imsave
-import os
 from resizeimage import resizeimage
-
 
 img_width, img_height = 150, 150
 
@@ -58,6 +57,7 @@ def base_resize(file_path):
 	hsize = int((float(img.size[1]) * float(wpercent)))
 	img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
 	img.save('{0}x{1}.jpg'.format(basewidth, hsize))
+
 
 ### for bulk operations (glob is also good for this)
 def bulkResize(folder):
