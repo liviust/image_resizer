@@ -4,28 +4,27 @@ import os
 from resizeimage import resizeimage
 
 
-### if aspect ratio needs to be maintained, but you're resizing to a single dimension
+img_width, img_height = 150, 150
 
 
+### if aspect ratio doesn't need to be maintained:
 def resize(folder, file_name):
     file_path = os.path.join(folder, file_name)
     im = Image.open(file_path)
-    new_im = resizeimage.resize_width(im, 150)  # change desired width dimension here, or use `resize_height` for height changes
+    new_im = imresize(im, size=(img_width, img_height))
+    imsave(file_path + "_resized.jpg", new_im)
+
+	
+### if aspect ratio needs to be maintained, and you're resizing to a single dimension
+def one_dim_resize(folder, file_name):
+    file_path = os.path.join(folder, file_name)
+    im = Image.open(file_path)
+    new_im = resizeimage.resize_width(im, img_width)  # use `resize_height` for height changes
     new_im.save(file_path + "_resized.jpg")
 
 
-def bulkResize(folder):
-    imgExts = ["jpg"]
-    for path, dirs, files in os.walk(folder):
-        for file_name in files:
-            resize(path, file_name)
-
-
 ### if aspect ratio has to be maintained, but you want to crop or pad
-
-
-def makeThumb(f_in, f_out, size=(80,80), pad=False):
-
+def thumb_resize(f_in, f_out, size=(img_width, img_height), pad=False):
     image = Image.open(f_in)
     image.thumbnail(size, Image.ANTIALIAS)
     image_size = image.size
@@ -44,43 +43,31 @@ def makeThumb(f_in, f_out, size=(80,80), pad=False):
     thumb.save(f_out)
 
 
-### if aspect ratio doesn't need to be maintained:
-
-
-def resize(folder, file_name):
-    file_path = os.path.join(folder, file_name)
-    im = Image.open(file_path)
-    new_im = imresize(im, size=(150, 150))  # replace with desired dims
-    imsave(file_path + "_resized.jpg", new_im)
-
-
-def bulkResize(folder):
-    imgExts = ["jpg"]
-    for path, dirs, files in os.walk(folder):
-        for file_name in files:
-            resize(path, file_name)
-
-
 ### alternate code that allows you to key off of a base height or base width for a single image
-
-
-def single_resize(file_path):
-	baseheight = 150
+def base_resize(file_path):
+	baseheight = img_height
 	img = Image.open(file_path)
 	hpercent = (baseheight / float(img.size[1]))
 	wsize = int((float(img.size[0]) * float(hpercent)))
 	img = img.resize((wsize, baseheight), PIL.Image.ANTIALIAS)
 	img.save('{0}x{1}.jpg'.format(wsize, baseheight))
 
-	basewidth = 150
+	basewidth = img_width
 	img = Image.open(file_path)
 	wpercent = (basewidth / float(img.size[0]))
 	hsize = int((float(img.size[1]) * float(wpercent)))
 	img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
 	img.save('{0}x{1}.jpg'.format(basewidth, hsize))
 
+### for bulk operations (glob is also good for this)
+def bulkResize(folder):
+    for path, dirs, files in os.walk(folder):
+        for file_name in files:
+            resize(path, file_name)  # or can sub one of alternative resizing functions above
+
+
 if __name__ == "__main__":
-	source = "<path to file directory goes here>"
-	bulkResize(source)
-	makeThumb(f_in=source, f_out="<outpath>", pad=True)
-	single_resize(source)
+	data_dir = "../images/to/be/resized/"
+	bulkResize(data_dir)  # or just use one of single image scripts here
+
+# Note: CV2 has a lot of good tools for this too -- will add some useful scripts later
